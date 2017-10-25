@@ -1,0 +1,37 @@
+<%= provide(:title, 'Sign up') %>
+<h1> Sign up</h1>
+
+<div>
+  <div >
+    <p> Create an account: </p>
+  </div>
+</div>
+
+<div>
+  <div>
+<%= form_for :users_new_path do |f| %>
+
+      <%= f.label :firstname %>
+      <%= f.text_field :firstname, :class => "text", style: "height:40px" %>
+        <br><br>
+      <%= f.label :lastname %>
+      <%= f.text_field :lastname, :class => "text", style: "height:40px" %>
+        <br><br>
+      <%= f.label :username %>
+      <%= f.text_field :username, :class => "text", style: "height:40px" %>
+      <br><br>
+      <%= f.label :email %>
+      <%= f.text_field :email, :class => "text", style: "height:40px" %>
+        <br><br>
+      <%= f.label :password %>
+      <%= f.password_field :password, :class => "text", style: "height:40px" %>
+        <br><br>
+      <%= f.label :password_confirmation, "Password Confirmation" %>
+      <%= f.password_field :password_confirmation, :class => "text", style: "height:40px" %>
+        <br><br>
+     
+      <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>
+

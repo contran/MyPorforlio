@@ -1,0 +1,105 @@
+<div class="tab-pane" id="comment">
+
+<div>
+<p>
+<strong>Title:</strong>
+<%= @article.title %>
+</p>
+
+<p>
+<strong>Text:</strong>
+<%= @article.text %>
+</p>
+<% if @post.user_id = @user_id %>
+<%= link_to 'Edit', post_update_path %>
+<% end %>
+</div>
+
+<div>
+<%= form_tag ('/comment/index') do %>
+<%= hidden_field_tag 'user_id', @user.id %>
+<%= hidden_field_tag 'post_id', @post.id %>
+<%= text_field_tag 'username', nil, :placeholder => 'User', :clnameass => 'span2' %>
+<%= text_field_tag 'text', nil, :placeholder => 'Text', :class => 'span20' %>
+<%= text_field_tag 'date', nil, :placeholder => 'Date yyyyMMdd', :class => 'span2' %>
+<%= submit_tag "Search", :name => nil %>
+<% end %>
+</div>
+<table class='table table-bordered table-striped'>
+<thead>
+<tr>
+<th class='member-table-th'> Username</th>
+<th class='member-table-th'> Text</th>
+<th class='member-table-th'> Date</th>
+</tr>
+</thead>
+<tbody>
+<% if !@comment_list.nil? %>
+<% @comment_list.each do |m| %>
+<% if !m.nil? %>
+<tr>
+<td class='member-table-td'>
+<%= m.username %>
+</td>
+<td class='member-table-td'>
+<p>
+<%= m.text.html_safe %>
+</p>
+</td>
+<td class='member-table-td'>
+<%= m.updated_at.in_time_zone(m.time_zone.to_s).strftime('%b %d, %Y %H:%M') %>
+</td>
+<td class='member-table-td'>
+<% if m.user_id == @user.id %>
+<%= link_to "Update", '/comment/update?id=' + m.id.to_s + '&user_id=' + @user.id.to_s %>
+&nbsp;&nbsp;
+<%= link_to "Delete", comment_delete_path(:id => m.id, :user_id =>@user.id), :method => :delete, :confirm => "Permenantly Delete This Comment?" %>
+<% end %>
+</td>
+</tr>
+<% end %>
+<% end %>
+</tbody>
+</table>
+
+<%= will_paginate @post_list, :class => 'apple_pagination' %>
+<br>
+<%= link_to "Add Comment", <script> function() { var modal = document.getElementById('newCommentModal');  %>
+<%= modal.style.display = "block";} </script> %>
+}
+<script>
+$("form").submit(function() {
+$.post($(this).attr('action'), $(this).serializeArray());
+var modal = document.getElementById('newCommentModal');
+modal.style.display = "none";
+});
+</script>
+
+<!-- The New Comment Modal -->
+<div id="newCommentModal" class="modal">
+<h1>New Comment</h1>
+
+<%= render 'shared/errors', obj: @comment %>
+
+<div class="row">
+<div class="col-xs-12">
+<%= form_for(@comment, :html => {class: "form-horizontal", role: "form"}) do |f| %>
+<%= f.hidden_field :post_id %>
+<div class="form-group">
+<div class="control-label col-sm-2">
+<%= f.label :comment %>
+</div>
+
+<div class="col-sm-8">
+<%= f.text_area :comment, rows: 3, class: "form-control", placeholder: "Please enter a comment", autofocus: true %>
+</div>
+<!-- The Close Button -->
+<span class="close" onclick="document.getElementById('newCommentModal').style.display='none'">&times;</span>
+</div>
+
+<div class="form-group">
+<div class="center col-sm-offset-1 col-sm-10">
+<%= f.submit class: "btn btn-primary btn-lg" %>
+</div>
+</div>
+<% end %>

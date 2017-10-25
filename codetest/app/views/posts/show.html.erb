@@ -1,0 +1,57 @@
+<div class="tab-pane" id="post">
+
+<table class='table table-bordered table-striped'>
+<thead>
+<tr>
+<th> Title*************</th>
+<th> User</th>
+<th> Date</th>
+<th> Action</th>
+</tr>
+</thead>
+<tbody>
+<% if @post_list %>
+<% @post_list.each do |m| %>
+<% if m %>
+<tr>
+<td>
+<%= m.title.html_safe %>
+</td>
+<td>
+<p>
+<% user = User.find_by_id(m.user_id) %>
+<%= user.username %>
+</p>
+</td>
+<td>
+</td>
+<td>
+<%= link_to "Details", /comments/show?id=' + m.id.to_s + '&user_id=' + user.id.to_s %>
+</td>
+</tr>
+<% end %>
+<% end %>
+<% end %>
+</tbody>
+</table>
+<% if @post_list %>
+<% end %>
+<br>
+</div>
+<div>
+<%= form_for :post do |f| %>
+<p>
+<%= f.label :title %><br>
+<%= f.text_field :title %>
+</p>
+
+<p>
+<%= f.label :text %><br>
+<%= f.text_area :text %>
+</p>
+
+<p>
+<%= f.submit %>
+</p>
+<% end %>
+</div>
